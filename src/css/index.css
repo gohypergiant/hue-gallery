@@ -1,0 +1,28 @@
+@import "usoniancss/dist/usonian.css";
+
+html {
+  background-color: #fff;
+}
+
+.Section {
+  height: 100vh;
+}
+
+.Section img {
+  border-radius: 10px;
+}
+
+.Colorbox {
+  bottom: 1rem;
+  position: fixed;
+  right: 1.5rem;
+}
+
+.Colorbox-swatch {
+  background-color: transparent;
+  border-radius: 100%;
+  display: inline-block;
+  height: 2rem;
+  margin: 0.25rem;
+  width: 2rem;
+}

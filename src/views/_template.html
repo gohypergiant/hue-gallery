@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--  Application CSS -->
+    {% for tag in cssTags %}
+    {{tag|safe}}
+    {% endfor %}
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.0.1/color-thief.min.js"></script>
+    <!--  Application JS -->
+    {% for tag in jsTags %}
+    {{tag|safe}}
+    {% endfor %}
+  </body>
+</html>
