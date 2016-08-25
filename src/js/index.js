@@ -1,6 +1,6 @@
 /* global ColorThief */
 import md5 from 'md5';
-import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 import forEach from 'lodash/forEach';
 import filter from 'lodash/filter';
 import isVisible from './visible';
@@ -19,7 +19,7 @@ import {
 
 const allImages = document.getElementsByTagName('img');
 const thief = new ColorThief();
-const throttleSpeed = 400;
+const debounceSpeed = 400;
 const colorCache = {};
 
 function getSwatches(key, img) {
@@ -81,7 +81,7 @@ function init() {
       // Setup scroll handler
       window.addEventListener(
         'scroll',
-        throttle(getImage, throttleSpeed),
+        debounce(getImage, debounceSpeed),
         false
       );
     })
