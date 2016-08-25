@@ -3,7 +3,9 @@ import md5 from 'md5';
 import debounce from 'lodash/debounce';
 import forEach from 'lodash/forEach';
 import filter from 'lodash/filter';
+
 import isVisible from './visible';
+import { colorAlgorithm } from './color';
 
 import {
   getLocalIp,
@@ -24,9 +26,10 @@ const colorCache = {};
 
 function getSwatches(key, img) {
   const colors = thief.getPalette(img, 11);
+  const filteredColors = colorAlgorithm(colors);
   // TODO only assign a single color to the cache key
   // this will probably be where we add in the algorithm
-  colorCache[key] = colors[0]; // hardcoded to first one for now
+  colorCache[key] = filteredColors[0]; // hardcoded to first one for now
 
   printSwatches(colors, img);
   return colorCache[key];
