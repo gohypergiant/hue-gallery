@@ -13,10 +13,12 @@ export function getLocalIp() {
         return new Error('No Hue bridge found.');
       }
 
+      // This is the local IP address of your Hue bridge box
       const ip = res.data[0].internalipaddress;
 
-      // Save in storage for easy lookup
+      // We will also save the ip in storage for easy lookup later
       localStorage.setItem('hue_ip', ip);
+
       return ip;
     });
 }
@@ -29,10 +31,13 @@ export function createUser(ip) {
         return new Error('Error creating bridge user.');
       }
 
+      // Hue generates a random username string that we
+      // need to save for future API calls
       const username = res.data[0].success.username;
 
-      // Save in storage for easy lookup
+      // We will also save the username in storage for easy lookup later
       localStorage.setItem('hue_username', username);
+
       return username;
     });
 }
@@ -44,6 +49,9 @@ export function getRooms() {
   return axios
     .get(`http://${ip}/api/${username}/groups`)
     .then(res => filter(
+      // Hue passes the ID as the object key by default so we assign it
+      // to the room object for easier access. Also, we only want groups
+      // of the type "Room" for this demonstration.
       map(res.data, (d, id) => assign(d, { id })),
       { type: 'Room' }
     ));
