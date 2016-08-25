@@ -9,6 +9,7 @@ import {
   getLocalIp,
   createUser,
   getRooms,
+  setRoomColor,
 } from './api';
 
 const thief = new ColorThief();
@@ -55,12 +56,19 @@ function buildRoomsDropdown(rooms) {
   // cycle through rooms and add as options
   roomsDropdown += '</select>';
 
-  container.appendChild(roomsDropdown);
+  // container.appendChild(roomsDropdown);
   // TODO add select change event to save current room to session storage
 }
 
 function getImage() {
-  console.log(filter(allImages, isVisible));
+  const img = filter(allImages, isVisible);
+
+  if (img.length > 1) {
+    return;
+  }
+
+  const key = md5(img[0].getAttribute('src'));
+  setRoomColor(colorCache[key][0]);
 }
 
 function setSessionData() {
