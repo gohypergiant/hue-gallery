@@ -1,15 +1,19 @@
-// http://stackoverflow.com/a/20283502
+// http://stackoverflow.com/a/36061908
 export function rgbToCie(rgb) {
-  const r = rgb[0];
-  const g = rgb[1];
-  const b = rgb[2];
+  const red = rgb[0];
+  const green = rgb[1];
+  const blue = rgb[2];
 
-  const x = (0.4124 * r) + (0.3576 * g) + (0.1805 * b);
-  const y = (0.2126 * r) + (0.7152 * g) + (0.0722 * b);
-  const z = (0.0193 * r) + (0.1192 * g) + (0.9505 * b);
+  const r = (red > 0.04045) ? Math.pow((red + 0.055) / (1.0 + 0.055), 2.4) : (red / 12.92);
+  const g = (green > 0.04045) ? Math.pow((green + 0.055) / (1.0 + 0.055), 2.4) : (green / 12.92);
+  const b = (blue > 0.04045) ? Math.pow((blue + 0.055) / (1.0 + 0.055), 2.4) : (blue / 12.92);
+
+  const x = (0.664511 * r) + (0.154324 * g) + (0.162028 * b);
+  const y = (0.283881 * r) + (0.668433 * g) + (0.047685 * b);
+  const z = (0.000088 * r) + (0.072310 * g) + (0.986039 * b);
 
   return [
-    x / (x + y + z),
-    y / (x + y + z),
+    (x / (x + y + z)).toPrecision(4),
+    (y / (x + y + z)).toPrecision(4),
   ];
 }
