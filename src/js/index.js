@@ -84,7 +84,7 @@ function getImage() {
   setRoomColor(colorCache[key][0]);
 }
 
-function setLocalData() {
+function hasLocalData() {
   return (
     localStorage.getItem('hue_ip') &&
     localStorage.getItem('hue_username')
@@ -112,7 +112,7 @@ function init() {
     .catch(err => console.log(err));
 }
 
-if (setLocalData()) {
+if (hasLocalData()) {
   init();
 } else {
   if (window.confirm('Please press Link button (large circle) on your Philips Hue bridge box.')) {
