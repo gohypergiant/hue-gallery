@@ -1,3 +1,5 @@
+import toNumber from 'lodash/toNumber';
+
 // http://stackoverflow.com/a/36061908
 export function rgbToCie(rgb) {
   const red = rgb[0];
@@ -13,7 +15,7 @@ export function rgbToCie(rgb) {
   const z = (0.000088 * r) + (0.072310 * g) + (0.986039 * b);
 
   return [
-    (x / (x + y + z)).toPrecision(4),
-    (y / (x + y + z)).toPrecision(4),
+    toNumber((x / (x + y + z)).toPrecision(4)),
+    toNumber((y / (x + y + z)).toPrecision(4)),
   ];
 }

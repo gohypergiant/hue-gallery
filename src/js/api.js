@@ -64,6 +64,8 @@ export function setRoomColor(rgb) {
   const hsl = convert.rgb.hsl(rgb);
   const xy = rgbToCie(rgb);
 
+  console.log(xy);
+
   return axios
     .put(`http://${ip}/api/${username}/groups/${room}/action`, {
       on: true,
