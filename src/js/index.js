@@ -12,28 +12,21 @@ import {
   setRoomColor,
 } from './api';
 
+import {
+  printSwatches,
+  buildRoomsDropdown,
+} from './dom';
+
+const allImages = document.getElementsByTagName('img');
 const thief = new ColorThief();
 const throttleSpeed = 400;
 const colorCache = {};
 
-const allImages = document.getElementsByTagName('img');
-
-function printSwatches(colors, img) {
-  const elSwatchBox = document.createElement('div');
-  elSwatchBox.classList.add('SwatchBox');
-  img.parentNode.appendChild(elSwatchBox);
-
-  forEach(colors, color => {
-    const elSwatch = document.createElement('div');
-    elSwatch.classList.add('Swatch');
-    elSwatch.style.backgroundColor = `rgb(${color[0]}, ${color[1]}, ${color[2]}`;
-    elSwatchBox.appendChild(elSwatch);
-  });
-}
-
 function getSwatches(key, img) {
   const colors = thief.getPalette(img, 11);
-  colorCache[key] = colors;
+  // TODO only assign a single color to the cache key
+  // this will probably be where we add in the algorithm
+  colorCache[key] = colors[0]; // hardcoded to first one for now
 
   printSwatches(colors, img);
   return colorCache[key];
@@ -49,44 +42,22 @@ function getPalette() {
   });
 }
 
-function buildRoomsDropdown(rooms) {
-  const roomsList = document.createDocumentFragment();
-  const container = document.getElementById('rooms-container');
-  const roomsDropdown = document.createElement('select');
-  roomsDropdown.setAttribute('id', 'rooms-dropdown');
-
-  // By default we want to set first value as current room
-  localStorage.setItem('hue_room', rooms[0].id);
-
-  forEach(rooms, room => {
-    const option = document.createElement('option');
-    option.textContent = room.name;
-    option.setAttribute('value', room.id);
-    roomsList.appendChild(option);
-  });
-
-  roomsDropdown.appendChild(roomsList);
-  container.appendChild(roomsDropdown);
-
-  roomsDropdown.addEventListener('change', e => {
-    localStorage.setItem('hue_room', e.target.value);
-  }, false);
-}
-
 function getImage() {
-  const img = filter(allImages, isVisible);
+  const imgs = filter(allImages, isVisible);
 
-  if (img.length > 1) {
+  // Only run when a single image is in view
+  if (imgs.length > 1) {
     return;
   }
 
-  const key = md5(img[0].getAttribute('src'));
+  const key = md5(imgs[0].getAttribute('src'));
 
-  if (!{}.hasOwnProperty.call(colorCache, key) || !colorCache[key].length) {
+  // Make sure we have the key in our color cache
+  if (!{}.hasOwnProperty.call(colorCache, key)) {
     return;
   }
 
-  setRoomColor(colorCache[key][0]);
+  setRoomColor(colorCache[key]);
 }
 
 function hasLocalData() {
