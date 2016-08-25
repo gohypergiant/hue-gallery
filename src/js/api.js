@@ -1,4 +1,5 @@
 import axios from 'axios';
+import filter from 'lodash/filter';
 
 export function getLocalIp() {
   return axios
@@ -11,7 +12,7 @@ export function getLocalIp() {
       const ip = res.data[0].internalipaddress;
 
       // Save in storage for easy lookup
-      localStorage.setItem('hue_ip', ip);
+      sessionStorage.setItem('hue_ip', ip);
       return ip;
     });
 }
@@ -27,26 +28,20 @@ export function createUser(ip) {
       const username = res.data[0].success.username;
 
       // Save in storage for easy lookup
-      localStorage.setItem('hue_username', username);
+      sessionStorage.setItem('hue_username', username);
       return username;
     });
 }
 
 export function getRooms() {
-  const ip = localStorage.getItem('hue_ip');
-  const username = localStorage.getItem('hue_username');
-
-  console.log(ip);
-  console.log(username);
+  const ip = sessionStorage.getItem('hue_ip');
+  const username = sessionStorage.getItem('hue_username');
 
   return axios
-    .post(`http://${ip}/api/${username}/groups`)
-    .then(res => {
-      if (!res.data.length) {
-        return new Error('No groups / rooms found.');
-      }
+    .get(`http://${ip}/api/${username}/groups`)
+    .then(res => filter(res.data, { type: 'Room' }));
+}
 
-      console.log(res);
-      return res.data;
-    });
+export function setLightsColor(rgb) {
+  
 }
