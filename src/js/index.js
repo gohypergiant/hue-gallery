@@ -1,6 +1,5 @@
 /* global ColorThief */
 import md5 from 'md5';
-import Blazy from 'blazy';
 import throttle from 'lodash/throttle';
 import forEach from 'lodash/forEach';
 import filter from 'lodash/filter';
@@ -12,7 +11,6 @@ import {
   getRooms,
 } from './api';
 
-const blazy = new Blazy(); // eslint-disable-line
 const thief = new ColorThief();
 const throttleSpeed = 200;
 const colorCache = {};
