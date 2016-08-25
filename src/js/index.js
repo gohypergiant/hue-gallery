@@ -19,7 +19,7 @@ import {
 
 const allImages = document.getElementsByTagName('img');
 const thief = new ColorThief();
-const debounceSpeed = 400;
+const debounceSpeed = 200;
 const colorCache = {};
 
 function getSwatches(key, img) {

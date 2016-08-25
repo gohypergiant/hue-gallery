@@ -2,7 +2,6 @@ import axios from 'axios';
 import assign from 'lodash/assign';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
-import convert from 'color-convert';
 import { rgbToCie } from './color';
 
 export function getLocalIp() {
@@ -61,17 +60,11 @@ export function setRoomColor(rgb) {
   const ip = localStorage.getItem('hue_ip');
   const username = localStorage.getItem('hue_username');
   const room = localStorage.getItem('hue_room');
-  const hsl = convert.rgb.hsl(rgb);
   const xy = rgbToCie(rgb);
-
-  console.log(xy);
 
   return axios
     .put(`http://${ip}/api/${username}/groups/${room}/action`, {
       on: true,
-      hue: hsl[0],
-      sat: hsl[1],
-      bri: hsl[2],
       xy,
     })
     .then(res => console.log(res));
