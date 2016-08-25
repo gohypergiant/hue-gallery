@@ -81,6 +81,11 @@ function getImage() {
   }
 
   const key = md5(img[0].getAttribute('src'));
+
+  if (!{}.hasOwnProperty.call(colorCache, key) || !colorCache[key].length) {
+    return;
+  }
+
   setRoomColor(colorCache[key][0]);
 }
 
