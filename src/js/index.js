@@ -13,7 +13,7 @@ import {
 } from './api';
 
 const thief = new ColorThief();
-const throttleSpeed = 200;
+const throttleSpeed = 400;
 const colorCache = {};
 
 const allImages = document.getElementsByTagName('img');
@@ -50,14 +50,27 @@ function getPalette() {
 }
 
 function buildRoomsDropdown(rooms) {
+  const roomsList = document.createDocumentFragment();
   const container = document.getElementById('rooms-container');
+  const roomsDropdown = document.createElement('select');
+  roomsDropdown.setAttribute('id', 'rooms-dropdown');
 
-  let roomsDropdown = '<select id="rooms-dropdown">';
-  // cycle through rooms and add as options
-  roomsDropdown += '</select>';
+  // By default we want to set first value as current room
+  localStorage.setItem('hue_room', rooms[0].id);
 
-  // container.appendChild(roomsDropdown);
-  // TODO add select change event to save current room to session storage
+  forEach(rooms, room => {
+    const option = document.createElement('option');
+    option.textContent = room.name;
+    option.setAttribute('value', room.id);
+    roomsList.appendChild(option);
+  });
+
+  roomsDropdown.appendChild(roomsList);
+  container.appendChild(roomsDropdown);
+
+  roomsDropdown.addEventListener('change', e => {
+    localStorage.setItem('hue_room', e.target.value);
+  }, false);
 }
 
 function getImage() {
@@ -71,9 +84,15 @@ function getImage() {
   setRoomColor(colorCache[key][0]);
 }
 
-function setSessionData() {
-  return getLocalIp()
-    .then(createUser);
+function setLocalData() {
+  return (
+    localStorage.getItem('hue_ip') &&
+    localStorage.getItem('hue_username')
+  );
+}
+
+function setLocalData() {
+  return getLocalIp().then(createUser);
 }
 
 function init() {
@@ -93,11 +112,11 @@ function init() {
     .catch(err => console.log(err));
 }
 
-if (sessionStorage.getItem('hue_ip') && sessionStorage.getItem('hue_username')) {
+if (setLocalData()) {
   init();
 } else {
   if (window.confirm('Please press Link button (large circle) on your Philips Hue bridge box.')) {
-    setSessionData()
+    setLocalData()
       .then(init)
       .catch(err => console.log(err));
   }
