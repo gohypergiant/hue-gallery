@@ -5,6 +5,12 @@ import debounce from 'lodash/debounce';
 import forEach from 'lodash/forEach';
 import getImages from './crawl';
 
+import {
+  getLocalIp,
+  createUser,
+  getRooms,
+} from './api';
+
 const blazy = new Blazy(); // eslint-disable-line
 const thief = new ColorThief();
 const debounceSpeed = 250;
@@ -58,9 +64,28 @@ function createColors() {
   });
 }
 
-createColors();
-window.addEventListener('scroll', debounce(createColors, debounceSpeed), false);
+function init() {
+  getLocalIp()
+    .then(createUser)
+    .then(getRooms)
+    .then(() => {
+      // Fire off color thief
+      createColors();
 
-if (module.hot) {
-  module.hot.accept();
+      // Setup scroll handler
+      window.addEventListener(
+        'scroll',
+        debounce(createColors, debounceSpeed),
+        false
+      );
+    })
+    .catch(err => console.log(err));
 }
+
+if (window.confirm('Please press Link button (large circle) on your Philips Hue bridge box.')) {
+  init();
+}
+
+// if (module.hot) {
+//   module.hot.accept();
+// }
