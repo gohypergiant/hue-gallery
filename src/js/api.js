@@ -87,7 +87,7 @@ export function setRoomColor(colors) {
   const apiCalls = [];
 
   if (lights.length > 3) {
-    const primaryChunkSize = Math.floor(lights.length * 0.66);
+    const primaryChunkSize = Math.floor(lights.length * 0.5);
     const leftoverChunkSize = (lights.length - primaryChunkSize) / 2;
     const primaryChunk = take(lights, primaryChunkSize);
 

@@ -93,17 +93,14 @@ function lightnessFilter(colors) {
   return filter(colors, c => (c[2] * 100) > 20);
 }
 
-function saturationFilter(colors) {
-  return filter(colors, c => (c[1] * 100) > 20);
-}
-
 function saturationSort(colors) {
   return sortBy(colors, c => -c[1]);
 }
 
 export function colorAlgorithm(colors) {
   const hslColors = map(colors, rgbToHsl);
-  const filteredAndSortedColors = saturationSort(saturationFilter(lightnessFilter(hslColors)));
+  const filteredAndSortedColors = saturationSort(lightnessFilter(hslColors));
+  const rgbColors = map(filteredAndSortedColors, hslToRgb);
 
-  return map(filteredAndSortedColors, hslToRgb);
+  return rgbColors.slice(0, 3);
 }
