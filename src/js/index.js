@@ -27,9 +27,8 @@ const colorCache = {};
 function getSwatches(key, img) {
   const colors = thief.getPalette(img, 11);
   const filteredColors = colorAlgorithm(colors);
-  // TODO only assign a single color to the cache key
-  // this will probably be where we add in the algorithm
-  colorCache[key] = filteredColors[0]; // hardcoded to first one for now
+
+  colorCache[key] = filteredColors;
 
   printSwatches(colors, img);
   return colorCache[key];

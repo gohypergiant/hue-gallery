@@ -2,6 +2,10 @@ import axios from 'axios';
 import assign from 'lodash/assign';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
+import forEach from 'lodash/forEach';
+import pull from 'lodash/pull';
+import chunk from 'lodash/chunk';
+import take from 'lodash/take';
 import { rgbToCie } from './color';
 
 export function getLocalIp() {
@@ -47,25 +51,57 @@ export function getRooms() {
 
   return axios
     .get(`http://${ip}/api/${username}/groups`)
-    .then(res => filter(
+    .then(res => {
+      forEach(res.data, (room, id) => {
+        localStorage.setItem(
+          `room_${id}_lights`,
+          JSON.stringify(room.lights)
+        );
+      });
+
       // Hue passes the ID as the object key by default so we assign it
       // to the room object for easier access. Also, we only want groups
       // of the type "Room" for this demonstration.
-      map(res.data, (d, id) => assign(d, { id })),
-      { type: 'Room' }
-    ));
+      return filter(
+        map(res.data, (d, id) => assign(d, { id })),
+        { type: 'Room' }
+      );
+    });
 }
 
-export function setRoomColor(rgb) {
+export function setLightColor(lightId) {
   const ip = localStorage.getItem('hue_ip');
   const username = localStorage.getItem('hue_username');
   const room = localStorage.getItem('hue_room');
-  const xy = rgbToCie(rgb);
+}
 
-  return axios
-    .put(`http://${ip}/api/${username}/groups/${room}/action`, {
-      on: true,
-      xy,
-    })
-    .then(res => console.log(res));
+export function setRoomColor(colors) {
+  const ip = localStorage.getItem('hue_ip');
+  const username = localStorage.getItem('hue_username');
+  const room = localStorage.getItem('hue_room');
+  const lights = JSON.parse(localStorage.getItem(`room_${room}_lights`));
+  const cieColors = map(colors, rgbToCie);
+
+  if (lights.length > 3) {
+    const primaryChunkSize = Math.floor(lights.length * 0.66);
+    const leftoverChunkSize = (lights.length - primaryChunkSize) / 2;
+    const primaryChunk = take(lights, primaryChunkSize);
+
+    // Remove primary chunk values
+    pull(lights, primaryChunk);
+
+    // Create an array of arrays for light ID's
+    const chunkedIds = chunk(lights, leftoverChunkSize);
+
+    // Add our primary chunk back into leftover array
+    chunkedIds.unshift(primaryChunk);
+
+    console.log(chunkedIds);
+  }
+
+  // return axios
+  //   .put(`http://${ip}/api/${username}/groups/${room}/action`, {
+  //     on: true,
+  //     xy,
+  //   });
 }
