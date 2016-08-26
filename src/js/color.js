@@ -68,7 +68,7 @@ function saturationSort(colors) {
 export function colorAlgorithm(colors) {
   const hslColors = map(colors, rgbToHsl);
   const filteredAndSortedColors = saturationSort(lightnessFilter(hslColors));
-  console.log(filteredAndSortedColors);
+  // console.log(filteredAndSortedColors);
 
   // TODO switch values back to RGB
   return filteredAndSortedColors;
