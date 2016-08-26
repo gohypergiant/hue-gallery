@@ -82,13 +82,13 @@ export function setRoomColor(colors) {
   const lights = JSON.parse(localStorage.getItem(`room_${room}_lights`));
   const cieColors = map(colors, rgbToCie);
 
-  if (lights.length > 3) {
+  if (lights.length > 1) {
     const primaryChunkSize = Math.floor(lights.length * 0.66);
     const leftoverChunkSize = (lights.length - primaryChunkSize) / 2;
     const primaryChunk = take(lights, primaryChunkSize);
 
     // Remove primary chunk values
-    pull(lights, primaryChunk);
+    pull(lights, ...primaryChunk);
 
     // Create an array of arrays for light ID's
     const chunkedIds = chunk(lights, leftoverChunkSize);
