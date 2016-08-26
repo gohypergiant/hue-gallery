@@ -45,10 +45,10 @@ function rgbToHsl(rgb) {
 
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
 
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
+    switch (max) { // eslint-disable-line
+      case r: h = ((g - b) / d) + (g < b ? 6 : 0); break;
+      case g: h = ((b - r) / d) + 2; break;
+      case b: h = ((r - g) / d) + 4; break;
     }
 
     h /= 6;
@@ -57,7 +57,43 @@ function rgbToHsl(rgb) {
   return [h, s, l];
 }
 
+// http://stackoverflow.com/a/9493060
+function hslToRgb(hsl) {
+  const h = hsl[0];
+  const s = hsl[1];
+  const l = hsl[2];
+
+  let r;
+  let g;
+  let b;
+
+  if (s === 0) {
+    r = g = b = l; // achromatic
+  } else {
+    const hue2rgb = function hue2rgb(p, q, t) {
+      if (t < 0) t += 1; // eslint-disable-line
+      if (t > 1) t -= 1; // eslint-disable-line
+      if (t < 1 / 6) return p + ((q - p) * 6 * t);
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + ((q - p) * ((2 / 3) - t) * 6);
+      return p;
+    };
+
+    const q = l < 0.5 ? l * (1 + s) : (l + s) - (l * s);
+    const p = (2 * l) - q;
+    r = hue2rgb(p, q, h + (1 / 3));
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - (1 / 3));
+  }
+
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
 function lightnessFilter(colors) {
+  return filter(colors, c => (c[2] * 100) > 20);
+}
+
+function saturationFilter(colors) {
   return filter(colors, c => (c[1] * 100) > 20);
 }
 
@@ -67,9 +103,7 @@ function saturationSort(colors) {
 
 export function colorAlgorithm(colors) {
   const hslColors = map(colors, rgbToHsl);
-  const filteredAndSortedColors = saturationSort(lightnessFilter(hslColors));
-  // console.log(filteredAndSortedColors);
+  const filteredAndSortedColors = saturationSort(saturationFilter(lightnessFilter(hslColors)));
 
-  // TODO switch values back to RGB
-  return filteredAndSortedColors;
+  return map(filteredAndSortedColors, hslToRgb);
 }

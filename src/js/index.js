@@ -30,7 +30,7 @@ function getSwatches(key, img) {
 
   colorCache[key] = filteredColors;
 
-  printSwatches(colors, img);
+  printSwatches(colorAlgorithm(colors), img);
   return colorCache[key];
 }
 
