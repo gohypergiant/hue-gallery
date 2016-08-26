@@ -69,18 +69,22 @@ export function getRooms() {
     });
 }
 
-export function setLightColor(lightId) {
+function setLightColor(id, xy) {
   const ip = localStorage.getItem('hue_ip');
   const username = localStorage.getItem('hue_username');
-  const room = localStorage.getItem('hue_room');
+
+  return axios
+    .put(`http://${ip}/api/${username}/lights/${id}/state`, {
+      on: true,
+      xy,
+    });
 }
 
 export function setRoomColor(colors) {
-  const ip = localStorage.getItem('hue_ip');
-  const username = localStorage.getItem('hue_username');
   const room = localStorage.getItem('hue_room');
   const lights = JSON.parse(localStorage.getItem(`room_${room}_lights`));
   const cieColors = map(colors, rgbToCie);
+  const apiCalls = [];
 
   if (lights.length > 3) {
     const primaryChunkSize = Math.floor(lights.length * 0.66);
@@ -96,12 +100,16 @@ export function setRoomColor(colors) {
     // Add our primary chunk back into leftover array
     chunkedIds.unshift(primaryChunk);
 
-    console.log(chunkedIds);
+    forEach(chunkedIds, (group, colorIndex) => {
+      forEach(group, id => {
+        apiCalls.push(setLightColor(id, cieColors[colorIndex]));
+      });
+    });
+  } else {
+    forEach(lights, (id, colorIndex) => {
+      apiCalls.push(setLightColor(id, cieColors[colorIndex]));
+    });
   }
 
-  // return axios
-  //   .put(`http://${ip}/api/${username}/groups/${room}/action`, {
-  //     on: true,
-  //     xy,
-  //   });
+  return axios.all(apiCalls);
 }
