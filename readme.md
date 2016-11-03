@@ -1,23 +1,38 @@
 # Hue Gallery Prototype
 
-<iframe width="888" height="500" src="https://www.youtube.com/embed/qOEEHlKU1Fw?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+Check out video of Hue Gallery in action on [YouTube](https://www.youtube.com/watch?v=qOEEHlKU1Fw)
 
-### Running
+[![Philips Hue & Hue Gallery: An Immersive Photo Viewing Experience](http://i.imgur.com/ArhIlpy.gif)](https://www.youtube.com/watch?v=qOEEHlKU1Fw)
+
+Learn more about how Hue Gallery works in [Net Magazine’s](http://www.creativebloq.com/net-magazine) December 2016 issue.
+
+### Running Locally
 ```
+$ git clone https://github.com/bpxl-labs/hue-gallery.git
+$ cd hue-gallery
+$ npm install
 $ npm start
 ```
 
-### Feature list
-
-- [x] Handle lazy loaded images
-- [x] Handle async content e.g. react / infinite scroll
+### TODO
 - [x] Cache `color-thief` calls
-- [ ] [RGB to CIE 1931 X,Y format](https://github.com/bjohnso5/hue-hacking#srccolorsjs) for Philips Hue
-- [ ] Give user control to select which room
-- [ ] Save settings on a global or per site basis
-- [ ] (LOW PRIORITY) Implement an algorithm to get 3 brightest colors
+- [x] Implement an algorithm to get 3 brightest colors
+- [x] Convert RGB to CIE 1931 X,Y format for Philips Hue
+- [x] Give user control to select which room
+- [ ] Improve UX for room selection
+- [ ] Improve UX for initial bridge registration
+- [ ] Add support for responsive images
+- [ ] Save settings on a global or per-site basis
 
-### Edge cases / questions
+### Future enhancements/questions
+- Should Hue Gallery be broken out into its own Chrome extension?
+  - What sites should it initially support?
+  - How do we handle more than one image in viewport?
+  - How do we handle lightbox-style components?
 
-- How do we handle if more than one image is in viewport e.g. instagram layout
-- How do we tie into lightbox style plugins
+---
+
+Website: [blackpixel.com](https://blackpixel.com) &nbsp;&middot;&nbsp;
+GitHub: [@bpxl-labs](https://github.com/bpxl-labs/) &nbsp;&middot;&nbsp;
+Twitter: [@blackpixel](https://twitter.com/blackpixel) &nbsp;&middot;&nbsp;
+Medium: [@bpxl-craft](https://medium.com/bpxl-craft)
