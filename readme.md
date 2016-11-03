@@ -2,7 +2,7 @@
 
 Check out video of Hue Gallery in action on [YouTube](https://www.youtube.com/watch?v=qOEEHlKU1Fw)
 
-[![Philips Hue & Hue Gallery: An Immersive Photo Viewing Experience](http://i.imgur.com/ArhIlpy.gif)](https://www.youtube.com/watch?v=qOEEHlKU1Fw)
+[![Hue Gallery in Action](https://cloud.githubusercontent.com/assets/468093/19956646/0f6589ac-a15d-11e6-80c7-8250f561223c.gif)](https://www.youtube.com/watch?v=qOEEHlKU1Fw)
 
 Learn more about how Hue Gallery works in [Net Magazine’s](http://www.creativebloq.com/net-magazine) December 2016 issue.
 
